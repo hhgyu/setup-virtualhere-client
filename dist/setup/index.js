@@ -31910,8 +31910,8 @@ function getVC(versionSpec, stable, checkLatest, auth, arch = node_os_1.default.
         const osPlat = node_os_1.default.platform();
         if (stable) {
             manifest = yield getManifest(auth);
-            if (!Object.hasOwn(manifest, 'version') &&
-                !(Array.isArray(manifest) && manifest.length > 0)) {
+            if (!(Object.hasOwn(manifest, 'version') ||
+                (Array.isArray(manifest) && manifest.length > 0))) {
                 throw new Error('not found manifest');
             }
             const stableVersion = yield resolveStableVersionInput(stable, arch, osPlat, manifest);

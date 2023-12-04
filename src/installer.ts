@@ -85,8 +85,10 @@ export async function getVC(
     manifest = await getManifest(auth);
 
     if (
-      !Object.hasOwn(manifest, 'version') &&
-      !(Array.isArray(manifest) && manifest.length > 0)
+      !(
+        Object.hasOwn(manifest, 'version') ||
+        (Array.isArray(manifest) && manifest.length > 0)
+      )
     ) {
       throw new Error('not found manifest');
     }
