@@ -36,7 +36,7 @@ export interface IVCVersionInfo {
 }
 
 export async function getManifest(auth: string | undefined) {
-  return getManifestFromRepo(
+  return await getManifestFromRepo(
     'hhgyu',
     'virtualhere-client-versions',
     auth,
@@ -83,8 +83,14 @@ export async function getVC(
 
   if (stable) {
     manifest = await getManifest(auth);
-    core.debug(`manifest: ${manifest}`);
-    
+
+    if (
+      !Object.hasOwn(manifest, 'version') &&
+      !(Array.isArray(manifest) && manifest.length > 0)
+    ) {
+      throw new Error('not found manifest');
+    }
+
     const stableVersion = await resolveStableVersionInput(
       stable,
       arch,
