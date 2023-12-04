@@ -17,7 +17,7 @@ jobs:
       - name: Setup Virtualhere Client
         uses: ./
         with:
-          vs-version: '>=5.5.6'
+          vc-version: '>=5.5.6'
 
       - name: Run Find USB Token
         run: |
