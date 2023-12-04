@@ -8,7 +8,7 @@
     "url": "git+https://github.com/hhgyu/setup-virtualhere.git"
   },
   "scripts": {
-    "build": "tsc && ncc build -o dist/setup src/setup-vc.ts && ncc build -o dist/cleanup src/cleanup.ts",
+    "build": "tsc && ncc build -s -o dist/setup src/setup-vc.ts && ncc build -s -o dist/cleanup src/cleanup.ts",
     "format": "prettier --no-error-on-unmatched-pattern --config ./.prettierrc.js --write \"**/*.{ts,yml,yaml}\"",
     "format-check": "prettier --no-error-on-unmatched-pattern --config ./.prettierrc.js --check \"**/*.{ts,yml,yaml}\"",
     "lint": "eslint --config ./.eslintrc.js \"**/*.ts\"",
