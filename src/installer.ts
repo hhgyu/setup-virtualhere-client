@@ -8,8 +8,8 @@ import {
   IToolRelease,
   cacheDir,
   downloadTool,
+  extract7z,
   extractTar,
-  extractZip,
   find,
   findFromManifest,
   getManifestFromRepo
@@ -262,7 +262,7 @@ export async function extractVCArchive(archivePath: string): Promise<string> {
   let extPath: string;
 
   if (platform === 'win32') {
-    extPath = await extractZip(archivePath);
+    extPath = await extract7z(archivePath);
   } else {
     extPath = await extractTar(archivePath);
   }

@@ -32036,7 +32036,7 @@ function extractVCArchive(archivePath) {
         const platform = node_os_1.default.platform();
         let extPath;
         if (platform === 'win32') {
-            extPath = yield (0, tool_cache_1.extractZip)(archivePath);
+            extPath = yield (0, tool_cache_1.extract7z)(archivePath);
         }
         else {
             extPath = yield (0, tool_cache_1.extractTar)(archivePath);
