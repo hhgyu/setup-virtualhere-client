@@ -32160,14 +32160,14 @@ const io = __importStar(__nccwpck_require__(7436));
 const installer = __importStar(__nccwpck_require__(2574));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const startCommand = `&{
-    $virtualhere = Get-Process virtualhere-client -ErrorAction SilentlyContinue
-    if (!$virtualhere) {
-        "vc-already=false" >> $env:GITHUB_OUTPUT
-        virtualhere-client -e -g
+  $virtualhere = Get-Process virtualhere-client -ErrorAction SilentlyContinue
+  if (!$virtualhere) {
+    Write-Output 'vc-already=false'
+    virtualhere-client -e -g
     sleep 1
-    } else {
-        "vc-already=true" >> $env:GITHUB_OUTPUT
-    }
+  } else {
+    Write-Output 'vc-already=true'
+  }
 }`;
 function run() {
     var _a, _b, _c;
@@ -32219,7 +32219,7 @@ function run() {
             const vcVersion = (_c = (_b = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : '';
             core.setOutput('vc-version', parseVCVersion(vcVersion));
         }
-        core.addPath(node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', 'scripts')));
+        core.addPath(node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts')));
         {
             const p = (0, node_child_process_1.spawnSync)(`pwsh${node_os_1.default.platform() == 'win32' ? '.exe' : ''}`, ['-NoProfile', '-Command', startCommand], { encoding: 'utf8', env: process.env });
             if (p.error) {

@@ -8,14 +8,14 @@ import * as installer from './installer';
 import path from 'node:path';
 
 const startCommand = `&{
-    $virtualhere = Get-Process virtualhere-client -ErrorAction SilentlyContinue
-    if (!$virtualhere) {
-        "vc-already=false" >> $env:GITHUB_OUTPUT
-        virtualhere-client -e -g
+  $virtualhere = Get-Process virtualhere-client -ErrorAction SilentlyContinue
+  if (!$virtualhere) {
+    Write-Output 'vc-already=false'
+    virtualhere-client -e -g
     sleep 1
-    } else {
-        "vc-already=true" >> $env:GITHUB_OUTPUT
-    }
+  } else {
+    Write-Output 'vc-already=true'
+  }
 }`;
 
 export async function run() {
@@ -90,7 +90,7 @@ export async function run() {
     core.setOutput('vc-version', parseVCVersion(vcVersion));
   }
 
-  core.addPath(path.normalize(path.join(__dirname, '..', 'scripts')));
+  core.addPath(path.normalize(path.join(__dirname, '..', '..', 'scripts')));
 
   {
     const p = spawnSync(
