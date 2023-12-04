@@ -19,11 +19,6 @@ const startCommand = `&{
 }`;
 
 export async function run() {
-  if (Object.hasOwn(process.env, 'JAVA_HOME')) {
-    core.error('JAVA_HOME not defined run actions/setup-java');
-    process.exit(1);
-  }
-
   let version = core.getInput('vc-version');
 
   let arch = core.getInput('architecture');
