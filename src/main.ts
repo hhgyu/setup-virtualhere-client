@@ -7,11 +7,13 @@ import * as io from '@actions/io';
 import * as installer from './installer';
 import path from 'node:path';
 
+const vsBin = `virtualhere-client${os.platform() == 'win32' ? '.exe' : ''}`;
+
 const startCommand = `&{
-  $virtualhere = Get-Process virtualhere-client -ErrorAction SilentlyContinue
+  $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
   if (!$virtualhere) {
     Write-Output 'vc-already=false'
-    virtualhere-client -e -g
+    ${vsBin} -e -g
     sleep 1
   } else {
     Write-Output 'vc-already=true'

@@ -9,8 +9,10 @@ process.on('uncaughtException', e => {
   core.info(`[warning]${e.message}`);
 });
 
+const vsBin = `virtualhere-client${platform() == 'win32' ? '.exe' : ''}`;
+
 const stopCommand = `&{
-    $virtualhere = Get-Process virtualhere-client -ErrorAction SilentlyContinue
+    $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
     if ($virtualhere) {
         $virtualhere.CloseMainWindow()
         sleep 1

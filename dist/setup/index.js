@@ -32159,11 +32159,12 @@ const core = __importStar(__nccwpck_require__(2186));
 const io = __importStar(__nccwpck_require__(7436));
 const installer = __importStar(__nccwpck_require__(2574));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
+const vsBin = `virtualhere-client${node_os_1.default.platform() == 'win32' ? '.exe' : ''}`;
 const startCommand = `&{
-  $virtualhere = Get-Process virtualhere-client -ErrorAction SilentlyContinue
+  $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
   if (!$virtualhere) {
     Write-Output 'vc-already=false'
-    virtualhere-client -e -g
+    ${vsBin} -e -g
     sleep 1
   } else {
     Write-Output 'vc-already=true'

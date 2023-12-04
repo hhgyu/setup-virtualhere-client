@@ -24751,8 +24751,9 @@ const node_os_1 = __nccwpck_require__(612);
 process.on('uncaughtException', e => {
     core.info(`[warning]${e.message}`);
 });
+const vsBin = `virtualhere-client${(0, node_os_1.platform)() == 'win32' ? '.exe' : ''}`;
 const stopCommand = `&{
-    $virtualhere = Get-Process virtualhere-client -ErrorAction SilentlyContinue
+    $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
     if ($virtualhere) {
         $virtualhere.CloseMainWindow()
         sleep 1
