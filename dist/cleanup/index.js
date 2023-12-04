@@ -24769,11 +24769,7 @@ function run() {
                 return;
             }
             {
-                const p = (0, node_child_process_1.spawnSync)(`pwsh${(0, node_os_1.platform)() == 'win32' ? '.exe' : ''}`, [
-                    '-NoProfile',
-                    '-Command',
-                    stopCommand
-                ], { encoding: 'utf8', env: process.env });
+                const p = (0, node_child_process_1.spawnSync)(`pwsh${(0, node_os_1.platform)() == 'win32' ? '.exe' : ''}`, ['-NoProfile', '-Command', stopCommand], { encoding: 'utf8', env: process.env });
                 if (p.error) {
                     throw p.error;
                 }

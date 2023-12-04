@@ -240,7 +240,7 @@ async function installVCVersion(
   const downloadPath = await downloadTool(info.downloadUrl, fileName, auth);
 
   core.info('Extracting VirtualHere-Client...');
-  let extPath = await extractVCArchive(downloadPath);
+  const extPath = await extractVCArchive(downloadPath);
   core.info(`Successfully extracted VirtualHere-Client to ${extPath}`);
 
   core.info('Adding to the cache ...');

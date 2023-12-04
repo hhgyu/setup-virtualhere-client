@@ -32018,7 +32018,7 @@ function installVCVersion(info, auth, arch) {
         const fileName = isWindows ? node_path_1.default.join(tempDir, info.fileName) : undefined;
         const downloadPath = yield (0, tool_cache_1.downloadTool)(info.downloadUrl, fileName, auth);
         core.info('Extracting VirtualHere-Client...');
-        let extPath = yield extractVCArchive(downloadPath);
+        const extPath = yield extractVCArchive(downloadPath);
         core.info(`Successfully extracted VirtualHere-Client to ${extPath}`);
         core.info('Adding to the cache ...');
         const toolCacheDir = yield addExecutablesToToolCache(extPath, info, arch);
@@ -32168,11 +32168,7 @@ const startCommand = `&{
 function run() {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
-        if (Object.hasOwn(process.env, 'JAVA_HOME')) {
-            core.error('JAVA_HOME not defined run actions/setup-java');
-            process.exit(1);
-        }
-        let version = core.getInput('vc-version');
+        const version = core.getInput('vc-version');
         let arch = core.getInput('architecture');
         // if architecture supplied but node-version is not
         // if we don't throw a warning, the already installed x64 node will be used which is not probably what user meant.
@@ -32221,11 +32217,7 @@ function run() {
         }
         core.addPath(node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', 'scripts')));
         {
-            const p = (0, node_child_process_1.spawnSync)(`pwsh${node_os_1.default.platform() == 'win32' ? '.exe' : ''}`, [
-                '-NoProfile',
-                '-Command',
-                startCommand
-            ], { encoding: 'utf8', env: process.env });
+            const p = (0, node_child_process_1.spawnSync)(`pwsh${node_os_1.default.platform() == 'win32' ? '.exe' : ''}`, ['-NoProfile', '-Command', startCommand], { encoding: 'utf8', env: process.env });
             if (p.error) {
                 throw p.error;
             }

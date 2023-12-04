@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
-import { spawnSync } from 'node:child_process';
-import { platform } from 'node:os';
+import {spawnSync} from 'node:child_process';
+import {platform} from 'node:os';
 
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
@@ -23,7 +23,7 @@ const stopCommand = `&{
 export async function run() {
   try {
     const shutdown = core.getBooleanInput('shutdown');
-  
+
     if (!shutdown) {
       return;
     }
@@ -31,11 +31,7 @@ export async function run() {
     {
       const p = spawnSync(
         `pwsh${platform() == 'win32' ? '.exe' : ''}`,
-        [
-          '-NoProfile',
-          '-Command',
-          stopCommand
-        ],
+        ['-NoProfile', '-Command', stopCommand],
         {encoding: 'utf8', env: process.env}
       );
       if (p.error) {
@@ -45,7 +41,7 @@ export async function run() {
       } else if (p.output[2] != '') {
         throw new Error(`stderr : ${p.output[2]}`);
       }
-  
+
       core.info('Successfully stoped VirtualHere-Client');
     }
   } catch (error) {

@@ -19,7 +19,7 @@ const startCommand = `&{
 }`;
 
 export async function run() {
-  let version = core.getInput('vc-version');
+  const version = core.getInput('vc-version');
 
   let arch = core.getInput('architecture');
 
@@ -95,11 +95,7 @@ export async function run() {
   {
     const p = spawnSync(
       `pwsh${os.platform() == 'win32' ? '.exe' : ''}`,
-      [
-        '-NoProfile',
-        '-Command',
-        startCommand
-      ],
+      ['-NoProfile', '-Command', startCommand],
       {encoding: 'utf8', env: process.env}
     );
     if (p.error) {

@@ -39,4 +39,3 @@ jobs:
         run: |
           virtualhere-pipe.ps1 "STOP USING,${{ steps.find-usb-token.outputs.TOKEN_ADDRESS }}"
           virtualhere-pipe.ps1 "MANUAL HUB REMOVE,${{ secrets.VIRTUALHERE_SERVER }}"
-
