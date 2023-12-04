@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+  push:
+    branches: [develop, main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Virtualhere Client
+        uses: ./
+        with:
+          vs-version: '>=5.5.6'
+
+      - name: Run Find USB Token
+        run: |
+          $success, $tokenAddress, $already = device-add.ps1 -Server "${{ secrets.VIRTUALHERE_SERVER }}" -DeviceName "${{ vars.VIRTUALHERE_DEVICE }}"
+
+          if (!$success) {
+            throw [System.Exception]::new("Device Not Added. ${{ vars.VIRTUALHERE_DEVICE }}")
+          }
+
+          "TOKEN_ADDRESS=$tokenAddress" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "ALREADY=$already" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        id: find-usb-token
+
+      - name: Run Check Add Device
+        run: .\scripts\virtualhere-pipe.ps1 "LIST"
+
+      - name: Post Run Stop
+        if: always() && steps.find-usb-token.outputs.ALREADY == 'false'
+        run: |
+          virtualhere-pipe.ps1 "STOP USING,${{ steps.find-usb-token.outputs.TOKEN_ADDRESS }}"
+          virtualhere-pipe.ps1 "MANUAL HUB REMOVE,${{ secrets.VIRTUALHERE_SERVER }}"
+

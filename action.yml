@@ -1,0 +1,25 @@
+name: 'Setup VirtualHere Client environment'
+description: 'Setup a VirtualHere Client environment by adding problem matchers and optionally downloading and adding it to the PATH.'
+author: 'GitHub'
+inputs:
+  vc-version:
+    description: 'Version Spec of the version to use. Examples: 5.5.6, 10.15.1, >=10.15.0.'
+  architecture:
+    description: 'Target architecture for Node to use. Examples: x86, x64. Will use system architecture by default.'
+  check-latest:
+    description: 'Set this option if you want the action to check for the latest available version that satisfies the version spec.'
+    default: 'false'
+  token:
+    description: Used to pull node distributions from node-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
+    default: ${{ github.server_url == 'https://github.com' && github.token || '' }}
+  shutdown:
+    description: 'Set this option to close the VirtualHere Client after the operation.'
+    default: 'true'
+outputs:
+  vc-version:
+    description: 'The installed VirtualHere Client version.'
+runs:
+  using: 'node20'
+  main: 'dist/setup/index.js'
+  post: 'dist/cleanup/index.js'
+  post-if: always()
