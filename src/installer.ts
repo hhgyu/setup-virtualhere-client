@@ -83,6 +83,8 @@ export async function getVC(
 
   if (stable) {
     manifest = await getManifest(auth);
+    core.debug(`manifest: ${manifest}`);
+    
     const stableVersion = await resolveStableVersionInput(
       stable,
       arch,

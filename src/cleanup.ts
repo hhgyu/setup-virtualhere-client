@@ -55,3 +55,5 @@ export async function run() {
     core.warning(message);
   }
 }
+
+run();
