@@ -31881,7 +31881,12 @@ const tool_cache_1 = __nccwpck_require__(7784);
 const semver_1 = __nccwpck_require__(1383);
 function getManifest(auth) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield (0, tool_cache_1.getManifestFromRepo)('hhgyu', 'virtualhere-client-versions', auth, 'main');
+        const manifest = yield (0, tool_cache_1.getManifestFromRepo)('hhgyu', 'virtualhere-client-versions', auth, 'main');
+        if (Object.hasOwn(manifest, 'version')) {
+            // 버전이 한개 일때 배열이 아니라 오브젝드로 반환됨
+            return [manifest];
+        }
+        return manifest;
     });
 }
 exports.getManifest = getManifest;
@@ -31910,10 +31915,6 @@ function getVC(versionSpec, stable, checkLatest, auth, arch = node_os_1.default.
         const osPlat = node_os_1.default.platform();
         if (stable) {
             manifest = yield getManifest(auth);
-            if (!(Object.hasOwn(manifest, 'version') ||
-                (Array.isArray(manifest) && manifest.length > 0))) {
-                throw new Error('not found manifest');
-            }
             const stableVersion = yield resolveStableVersionInput(stable, arch, osPlat, manifest);
             if (stableVersion) {
                 core.info(`stable version resolved as ${stableVersion}`);

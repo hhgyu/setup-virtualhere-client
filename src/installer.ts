@@ -36,12 +36,19 @@ export interface IVCVersionInfo {
 }
 
 export async function getManifest(auth: string | undefined) {
-  return await getManifestFromRepo(
+  const manifest = await getManifestFromRepo(
     'hhgyu',
     'virtualhere-client-versions',
     auth,
     'main'
   );
+
+  if (Object.hasOwn(manifest, 'version')) {
+    // 버전이 한개 일때 배열이 아니라 오브젝드로 반환됨
+    return [manifest as unknown as IToolRelease];
+  }
+
+  return manifest;
 }
 
 export async function getInfoFromManifest(
@@ -83,16 +90,6 @@ export async function getVC(
 
   if (stable) {
     manifest = await getManifest(auth);
-
-    if (
-      !(
-        Object.hasOwn(manifest, 'version') ||
-        (Array.isArray(manifest) && manifest.length > 0)
-      )
-    ) {
-      throw new Error('not found manifest');
-    }
-
     const stableVersion = await resolveStableVersionInput(
       stable,
       arch,
