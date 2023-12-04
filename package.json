@@ -8,7 +8,9 @@
     "url": "git+https://github.com/hhgyu/setup-virtualhere.git"
   },
   "scripts": {
-    "build": "tsc && ncc build -s -o dist/setup src/setup-vc.ts && ncc build -s -o dist/cleanup src/cleanup.ts",
+    "build:setup": "ncc build -s -o dist/setup src/setup-vc.ts && cpy node_modules/@actions/tool-cache/scripts/**/* dist/setup/",
+    "build:cleanup": "ncc build -s -o dist/cleanup src/cleanup.ts ",
+    "build": "concurrently 'tsc' 'npm:build:setup' 'npm:build:cleanup'",
     "format": "prettier --no-error-on-unmatched-pattern --config ./.prettierrc.js --write \"**/*.{ts,yml,yaml}\"",
     "format-check": "prettier --no-error-on-unmatched-pattern --config ./.prettierrc.js --check \"**/*.{ts,yml,yaml}\"",
     "lint": "eslint --config ./.eslintrc.js \"**/*.ts\"",
@@ -28,6 +30,8 @@
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "@vercel/ncc": "^0.38.1",
+    "concurrently": "^8.2.2",
+    "cpy-cli": "^5.0.0",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-node": "^11.1.0",

@@ -157,8 +157,6 @@ export async function getVC(
       if (err.stack) {
         core.debug(err.stack);
       }
-
-      core.info('Falling back to download directly from VirtualHere-Client');
     } else {
       core.info(`${err}: Unexpected Error`);
     }
@@ -166,7 +164,7 @@ export async function getVC(
 
   if (!downloadPath) {
     throw new Error(
-      `Unable to find Go version '${versionSpec}' for platform ${osPlat} and architecture ${arch}.`
+      `Unable to find VirtualHere-Client version '${versionSpec}' for platform ${osPlat} and architecture ${arch}.`
     );
   }
 

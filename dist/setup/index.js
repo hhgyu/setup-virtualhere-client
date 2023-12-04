@@ -31963,14 +31963,13 @@ function getVC(versionSpec, stable, checkLatest, auth, arch = node_os_1.default.
                 if (err.stack) {
                     core.debug(err.stack);
                 }
-                core.info('Falling back to download directly from VirtualHere-Client');
             }
             else {
                 core.info(`${err}: Unexpected Error`);
             }
         }
         if (!downloadPath) {
-            throw new Error(`Unable to find Go version '${versionSpec}' for platform ${osPlat} and architecture ${arch}.`);
+            throw new Error(`Unable to find VirtualHere-Client version '${versionSpec}' for platform ${osPlat} and architecture ${arch}.`);
         }
         return downloadPath;
     });
