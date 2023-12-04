@@ -90,7 +90,11 @@ export async function run() {
     core.setOutput('vc-version', parseVCVersion(vcVersion));
   }
 
-  core.addPath(path.normalize(path.join(__dirname, '..', '..', 'scripts')));
+  const scriptsPath = path.normalize(
+    path.join(__dirname, '..', '..', 'scripts')
+  );
+  process.env['PATH'] = `${scriptsPath}:${process.env['PATH']}`;
+  core.addPath(scriptsPath);
 
   {
     const p = spawnSync(
@@ -118,7 +122,9 @@ export async function addBinToPath(): Promise<boolean> {
     return false;
   }
 
-  core.addPath(vc);
+  const vcPath = path.dirname(vc);
+  process.env['PATH'] = `${vcPath}:${process.env['PATH']}`;
+  core.addPath(vcPath);
   return true;
 }
 

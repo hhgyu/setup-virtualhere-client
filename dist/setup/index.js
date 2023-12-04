@@ -32219,7 +32219,9 @@ function run() {
             const vcVersion = (_c = (_b = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : '';
             core.setOutput('vc-version', parseVCVersion(vcVersion));
         }
-        core.addPath(node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts')));
+        const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts'));
+        process.env['PATH'] = `${scriptsPath}:${process.env['PATH']}`;
+        core.addPath(scriptsPath);
         {
             const p = (0, node_child_process_1.spawnSync)(`pwsh${node_os_1.default.platform() == 'win32' ? '.exe' : ''}`, ['-NoProfile', '-Command', startCommand], { encoding: 'utf8', env: process.env });
             if (p.error) {
@@ -32244,7 +32246,9 @@ function addBinToPath() {
             core.debug('VirtualHere-Client not in the path');
             return false;
         }
-        core.addPath(vc);
+        const vcPath = node_path_1.default.dirname(vc);
+        process.env['PATH'] = `${vcPath}:${process.env['PATH']}`;
+        core.addPath(vcPath);
         return true;
     });
 }
