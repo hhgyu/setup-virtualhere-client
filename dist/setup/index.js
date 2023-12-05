@@ -32211,12 +32211,13 @@ function run() {
             const vcVersion = (_c = (_b = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : '';
             core.setOutput('vc-version', parseVCVersion(vcVersion));
         }
-        const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts'));
+        const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(process.cwd(), 'scripts'));
         core.addPath(scriptsPath);
+        core.info(`scriptsPath: ${scriptsPath}`);
         {
             const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'vc-start.ps1', '-VcBin', vcBin], {
                 encoding: 'utf8',
-                env: process.env
+                env: Object.assign({}, process.env)
             });
             if (p.error) {
                 throw p.error;

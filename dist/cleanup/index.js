@@ -24764,7 +24764,7 @@ function run() {
             {
                 const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'vc-stop.ps1', '-VcBin', vcBin], {
                     encoding: 'utf8',
-                    env: process.env
+                    env: Object.assign({}, process.env)
                 });
                 if (p.error) {
                     throw p.error;

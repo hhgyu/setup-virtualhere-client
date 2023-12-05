@@ -80,18 +80,17 @@ export async function run() {
     core.setOutput('vc-version', parseVCVersion(vcVersion));
   }
 
-  const scriptsPath = path.normalize(
-    path.join(__dirname, '..', '..', 'scripts')
-  );
+  const scriptsPath = path.normalize(path.join(process.cwd(), 'scripts'));
   core.addPath(scriptsPath);
 
+  core.info(`scriptsPath: ${scriptsPath}`);
   {
     const p = spawnSync(
       'pwsh',
       ['-NoProfile', '-File', 'vc-start.ps1', '-VcBin', vcBin],
       {
         encoding: 'utf8',
-        env: process.env
+        env: {...process.env}
       }
     );
     if (p.error) {

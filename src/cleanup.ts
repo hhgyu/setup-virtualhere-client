@@ -27,7 +27,7 @@ export async function run() {
         ['-NoProfile', '-File', 'vc-stop.ps1', '-VcBin', vcBin],
         {
           encoding: 'utf8',
-          env: process.env
+          env: {...process.env}
         }
       );
       if (p.error) {
