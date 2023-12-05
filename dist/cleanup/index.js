@@ -24750,7 +24750,7 @@ const node_child_process_1 = __nccwpck_require__(7718);
 process.on('uncaughtException', e => {
     core.info(`[warning]${e.message}`);
 });
-const vsBin = 'virtualhere-client';
+const vsBin = core.getInput('vc-name');
 const stopCommand = `&{
     $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
     if ($virtualhere) {

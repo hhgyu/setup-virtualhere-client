@@ -32152,19 +32152,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseVCVersion = exports.addBinToPath = exports.run = void 0;
+exports.parseVCVersion = exports.run = void 0;
 const node_os_1 = __importDefault(__nccwpck_require__(612));
 const node_child_process_1 = __nccwpck_require__(7718);
 const core = __importStar(__nccwpck_require__(2186));
 const io = __importStar(__nccwpck_require__(7436));
 const installer = __importStar(__nccwpck_require__(2574));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
-const vsBin = 'virtualhere-client';
+const vcBin = core.getInput('vc-name');
 const startCommand = `&{
-  $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
+  $virtualhere = Get-Process ${vcBin} -ErrorAction SilentlyContinue
   if (!$virtualhere) {
     Write-Output 'vc-already=false'
-    ${vsBin} -e -g
+    ${vcBin} -e -g
     sleep 1
   } else {
     Write-Output 'vc-already=true'
@@ -32196,9 +32196,7 @@ function run() {
         else {
             core.info('[warning]vc-version input was not specified. The action will try to use pre-installed version.');
         }
-        const added = yield addBinToPath();
-        core.debug(`add bin ${added}`);
-        const vcPath = yield io.which('virtualhere-client');
+        const vcPath = yield io.which(vcBin);
         if (node_os_1.default.platform() == 'win32') {
             const p = (0, node_child_process_1.spawnSync)('pwsh', [
                 '-NoProfile',
@@ -32248,20 +32246,6 @@ function run() {
     });
 }
 exports.run = run;
-function addBinToPath() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const vc = yield io.which('virtualhere-client');
-        core.debug(`which VirtualHere-Client :${vc}:`);
-        if (!vc) {
-            core.debug('VirtualHere-Client not in the path');
-            return false;
-        }
-        const vcPath = node_path_1.default.dirname(vc);
-        core.addPath(vcPath);
-        return true;
-    });
-}
-exports.addBinToPath = addBinToPath;
 function parseVCVersion(versionString) {
     let versinMatch = /^VirtualHere Client \(v(?<Version>\d+\.\d+\.\d+)\)/m.exec(versionString);
     if ((versinMatch === null || versinMatch === void 0 ? void 0 : versinMatch.groups) && Object.hasOwn(versinMatch.groups, 'Version')) {

@@ -7,13 +7,13 @@ import * as io from '@actions/io';
 import * as installer from './installer';
 import path from 'node:path';
 
-const vsBin = 'virtualhere-client';
+const vcBin = core.getInput('vc-name');
 
 const startCommand = `&{
-  $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
+  $virtualhere = Get-Process ${vcBin} -ErrorAction SilentlyContinue
   if (!$virtualhere) {
     Write-Output 'vc-already=false'
-    ${vsBin} -e -g
+    ${vcBin} -e -g
     sleep 1
   } else {
     Write-Output 'vc-already=true'
@@ -62,10 +62,7 @@ export async function run() {
     );
   }
 
-  const added = await addBinToPath();
-  core.debug(`add bin ${added}`);
-
-  const vcPath = await io.which('virtualhere-client');
+  const vcPath = await io.which(vcBin);
 
   if (os.platform() == 'win32') {
     const p = spawnSync(
@@ -119,19 +116,6 @@ export async function run() {
 
     core.info('Successfully Start up VirtualHere-Client');
   }
-}
-
-export async function addBinToPath(): Promise<boolean> {
-  const vc = await io.which('virtualhere-client');
-  core.debug(`which VirtualHere-Client :${vc}:`);
-  if (!vc) {
-    core.debug('VirtualHere-Client not in the path');
-    return false;
-  }
-
-  const vcPath = path.dirname(vc);
-  core.addPath(vcPath);
-  return true;
 }
 
 export function parseVCVersion(versionString: string): string {

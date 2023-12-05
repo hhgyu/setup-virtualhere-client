@@ -15,6 +15,9 @@ inputs:
   shutdown:
     description: 'Set this option to close the VirtualHere Client after the operation.'
     default: 'true'
+  vc-name:
+    description: default name virtualhere-client
+    default: 'virtualhere-client'
 outputs:
   vc-version:
     description: 'The installed VirtualHere Client version.'
