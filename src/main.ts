@@ -83,7 +83,9 @@ export async function run() {
   const scriptsPath = path.normalize(path.join(process.cwd(), 'scripts'));
   core.addPath(scriptsPath);
 
-  core.info(`scriptsPath: ${scriptsPath}`);
+  const vcStartPath = await io.which('vc-start.ps1');
+  core.info(`scriptsPath: ${scriptsPath} : ${vcStartPath}`);
+
   {
     const p = spawnSync(
       'pwsh',

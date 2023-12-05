@@ -8,7 +8,7 @@ param (
 $virtualhere = Get-Process $VcBin -ErrorAction SilentlyContinue
 if (!$virtualhere) {
   Write-Output 'vc-already=false'
-  $VcBin -e -g
+  Start-Process -FilePath $VcBin -ArgumentList "-e -g"
   Start-Sleep 1
 } else {
   Write-Output 'vc-already=true'
