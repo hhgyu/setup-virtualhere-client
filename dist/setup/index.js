@@ -32213,6 +32213,7 @@ function run() {
         }
         const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(process.cwd(), 'scripts'));
         core.addPath(scriptsPath);
+        core.info(`scriptsPath: ${scriptsPath} : ${yield io.which('VC-Start.ps1')} : ${yield io.which('VC-Start')} : ${yield io.which('Vc-Start')}`);
         {
             const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'VC-Start', '-VcBin', vcBin], {
                 encoding: 'utf8',
