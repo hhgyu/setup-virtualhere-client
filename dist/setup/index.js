@@ -32171,7 +32171,7 @@ const startCommand = `&{
   }
 }`;
 function run() {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
         const version = core.getInput('vc-version');
         let arch = core.getInput('architecture');
@@ -32235,6 +32235,13 @@ function run() {
             }
             else if (p.output[2] != '') {
                 throw new Error(`stderr : ${p.output[2]}`);
+            }
+            const out = (_d = p.output[1]) !== null && _d !== void 0 ? _d : '';
+            if (out.includes('vc-already=true')) {
+                core.setOutput('vc-already', 'true');
+            }
+            else {
+                core.setOutput('vc-already', 'false');
             }
             core.info('Successfully Start up VirtualHere-Client');
         }

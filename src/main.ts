@@ -110,6 +110,13 @@ export async function run() {
       throw new Error(`stderr : ${p.output[2]}`);
     }
 
+    const out = p.output[1] ?? '';
+    if (out.includes('vc-already=true')) {
+      core.setOutput('vc-already', 'true');
+    } else {
+      core.setOutput('vc-already', 'false');
+    }
+
     core.info('Successfully Start up VirtualHere-Client');
   }
 }
