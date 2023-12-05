@@ -24,7 +24,7 @@ export async function run() {
     {
       const p = spawnSync(
         'pwsh',
-        ['-NoProfile', '-File', 'VC-Stop', '-VcBin', vcBin],
+        ['-NoProfile', '-Command', `VC-Stop -VcBin ${vcBin}`],
         {
           encoding: 'utf8',
           env: {...process.env}

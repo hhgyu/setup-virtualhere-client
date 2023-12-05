@@ -24762,7 +24762,7 @@ function run() {
                 return;
             }
             {
-                const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'VC-Stop', '-VcBin', vcBin], {
+                const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', `VC-Stop -VcBin ${vcBin}`], {
                     encoding: 'utf8',
                     env: Object.assign({}, process.env)
                 });
