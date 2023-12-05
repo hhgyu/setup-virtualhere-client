@@ -9,7 +9,7 @@ $virtualhere = Get-Process $VcBin -ErrorAction SilentlyContinue
 if (!$virtualhere) {
   Write-Output 'vc-already=false'
   $VcBin -e -g
-  sleep 1
+  Start-Sleep 1
 } else {
   Write-Output 'vc-already=true'
 }

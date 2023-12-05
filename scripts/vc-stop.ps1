@@ -8,7 +8,7 @@ param (
 $virtualhere = Get-Process $VcBin -ErrorAction SilentlyContinue
 if ($virtualhere) {
   $virtualhere.CloseMainWindow()
-  sleep 1
+  Start-Sleep 1
   if (!$virtualhere.HasExited) {
     $virtualhere | Stop-Process -Force
   }
