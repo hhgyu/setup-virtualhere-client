@@ -32204,7 +32204,7 @@ function run() {
                 '-NoProfile',
                 '-Command',
                 `&{ Write-Output ([System.Diagnostics.FileVersionInfo]::GetVersionInfo("${vcPath}").FileVersion) }`
-            ], { encoding: 'utf8' });
+            ], { encoding: 'utf8', env: process.env });
             if (p.error) {
                 throw p.error;
             }
@@ -32222,9 +32222,6 @@ function run() {
         }
         const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts'));
         core.addPath(scriptsPath);
-        if (!`${process.env['PATH']}`.includes(scriptsPath)) {
-            process.env['PATH'] = `${scriptsPath};${process.env['PATH']}`;
-        }
         {
             const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', startCommand], {
                 encoding: 'utf8',
@@ -32254,9 +32251,6 @@ function addBinToPath() {
         }
         const vcPath = node_path_1.default.dirname(vc);
         core.addPath(vcPath);
-        if (!`${process.env['PATH']}`.includes(vcPath)) {
-            process.env['PATH'] = `${vcPath};${process.env['PATH']}`;
-        }
         return true;
     });
 }

@@ -75,7 +75,7 @@ export async function run() {
         '-Command',
         `&{ Write-Output ([System.Diagnostics.FileVersionInfo]::GetVersionInfo("${vcPath}").FileVersion) }`
       ],
-      {encoding: 'utf8'}
+      {encoding: 'utf8', env: process.env}
     );
     if (p.error) {
       throw p.error;
@@ -96,9 +96,6 @@ export async function run() {
     path.join(__dirname, '..', '..', 'scripts')
   );
   core.addPath(scriptsPath);
-  if (!`${process.env['PATH']}`.includes(scriptsPath)) {
-    process.env['PATH'] = `${scriptsPath};${process.env['PATH']}`;
-  }
 
   {
     const p = spawnSync('pwsh', ['-NoProfile', '-Command', startCommand], {
@@ -127,9 +124,6 @@ export async function addBinToPath(): Promise<boolean> {
 
   const vcPath = path.dirname(vc);
   core.addPath(vcPath);
-  if (!`${process.env['PATH']}`.includes(vcPath)) {
-    process.env['PATH'] = `${vcPath};${process.env['PATH']}`;
-  }
   return true;
 }
 
