@@ -32213,10 +32213,8 @@ function run() {
         }
         const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(process.cwd(), 'scripts'));
         core.addPath(scriptsPath);
-        const vcStartPath = yield io.which('vc-start.ps1');
-        core.info(`scriptsPath: ${scriptsPath} : ${vcStartPath}`);
         {
-            const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'vc-start.ps1', '-VcBin', vcBin], {
+            const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'VC-Start', '-VcBin', vcBin], {
                 encoding: 'utf8',
                 env: Object.assign({}, process.env)
             });

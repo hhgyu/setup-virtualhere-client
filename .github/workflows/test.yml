@@ -21,7 +21,7 @@ jobs:
 
       - name: Run Find USB Token
         run: |
-          $success, $tokenAddress, $already = device-add.ps1 -Server "${{ secrets.VIRTUALHERE_SERVER }}" -DeviceName "${{ vars.VIRTUALHERE_DEVICE }}"
+          $success, $tokenAddress, $already = VC-Device-Add -Server "${{ secrets.VIRTUALHERE_SERVER }}" -DeviceName "${{ vars.VIRTUALHERE_DEVICE }}"
 
           if (!$success) {
             throw [System.Exception]::new("Device Not Added. ${{ vars.VIRTUALHERE_DEVICE }}")
@@ -32,10 +32,10 @@ jobs:
         id: find-usb-token
 
       - name: Run Check Add Device
-        run: .\scripts\virtualhere-pipe.ps1 "LIST"
+        run: VC-Pipe "LIST"
 
       - name: Post Run Stop
         if: always() && steps.find-usb-token.outputs.ALREADY == 'false'
         run: |
-          virtualhere-pipe.ps1 "STOP USING,${{ steps.find-usb-token.outputs.TOKEN_ADDRESS }}"
-          virtualhere-pipe.ps1 "MANUAL HUB REMOVE,${{ secrets.VIRTUALHERE_SERVER }}"
+          VC-Pipe "STOP USING,${{ steps.find-usb-token.outputs.TOKEN_ADDRESS }}"
+          VC-Pipe "MANUAL HUB REMOVE,${{ secrets.VIRTUALHERE_SERVER }}"
