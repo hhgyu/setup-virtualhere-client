@@ -96,6 +96,7 @@ export async function run() {
     path.join(__dirname, '..', '..', 'scripts')
   );
   process.env['PATH'] = `${scriptsPath}:${process.env['PATH']}`;
+  core.debug(`Append Env Path: ${process.env['PATH']}`);
   core.addPath(scriptsPath);
 
   {
@@ -125,6 +126,7 @@ export async function addBinToPath(): Promise<boolean> {
 
   const vcPath = path.dirname(vc);
   process.env['PATH'] = `${vcPath}:${process.env['PATH']}`;
+  core.debug(`Append Env Path: ${process.env['PATH']}`);
   core.addPath(vcPath);
   return true;
 }

@@ -32222,6 +32222,7 @@ function run() {
         }
         const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts'));
         process.env['PATH'] = `${scriptsPath}:${process.env['PATH']}`;
+        core.debug(`Append Env Path: ${process.env['PATH']}`);
         core.addPath(scriptsPath);
         {
             const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', startCommand], {
@@ -32252,6 +32253,7 @@ function addBinToPath() {
         }
         const vcPath = node_path_1.default.dirname(vc);
         process.env['PATH'] = `${vcPath}:${process.env['PATH']}`;
+        core.debug(`Append Env Path: ${process.env['PATH']}`);
         core.addPath(vcPath);
         return true;
     });
