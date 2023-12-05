@@ -95,9 +95,10 @@ export async function run() {
   const scriptsPath = path.normalize(
     path.join(__dirname, '..', '..', 'scripts')
   );
-  process.env['PATH'] = `${scriptsPath}:${process.env['PATH']}`;
-  core.debug(`Append Env Path: ${process.env['PATH']}`);
   core.addPath(scriptsPath);
+  if (!`${process.env['PATH']}`.includes(scriptsPath)) {
+    process.env['PATH'] = `${scriptsPath};${process.env['PATH']}`;
+  }
 
   {
     const p = spawnSync('pwsh', ['-NoProfile', '-Command', startCommand], {
@@ -125,9 +126,10 @@ export async function addBinToPath(): Promise<boolean> {
   }
 
   const vcPath = path.dirname(vc);
-  process.env['PATH'] = `${vcPath}:${process.env['PATH']}`;
-  core.debug(`Append Env Path: ${process.env['PATH']}`);
   core.addPath(vcPath);
+  if (!`${process.env['PATH']}`.includes(vcPath)) {
+    process.env['PATH'] = `${vcPath};${process.env['PATH']}`;
+  }
   return true;
 }
 
