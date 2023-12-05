@@ -24770,10 +24770,10 @@ function run() {
                     throw p.error;
                 }
                 else if (p.status != 0) {
-                    throw new Error(`exitCode not zero ${p.status}`);
+                    throw new Error(`exitCode not zero ${p.status} : ${p.output[2]}`);
                 }
                 else if (p.output[2] != '') {
-                    throw new Error(`stderr : ${p.output[2]}`);
+                    throw new Error(`err : ${p.output[2]}`);
                 }
                 core.info('Successfully stoped VirtualHere-Client');
             }

@@ -32214,20 +32214,18 @@ function run() {
         const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts'));
         core.addPath(scriptsPath);
         {
-            core.info(`start VirtualHere-Client`);
             const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'vc-start.ps1', '-VcBin', vcBin], {
                 encoding: 'utf8',
                 env: process.env
             });
-            core.info(`end VirtualHere-Client`);
             if (p.error) {
                 throw p.error;
             }
             else if (p.status != 0) {
-                throw new Error(`exitCode not zero ${p.status}`);
+                throw new Error(`exitCode not zero ${p.status} : ${p.output[2]}`);
             }
             else if (p.output[2] != '') {
-                throw new Error(`stderr : ${p.output[2]}`);
+                throw new Error(`err : ${p.output[2]}`);
             }
             const out = (_d = p.output[1]) !== null && _d !== void 0 ? _d : '';
             if (out.includes('vc-already=true')) {

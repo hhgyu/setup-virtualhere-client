@@ -86,7 +86,6 @@ export async function run() {
   core.addPath(scriptsPath);
 
   {
-    core.info(`start VirtualHere-Client`);
     const p = spawnSync(
       'pwsh',
       ['-NoProfile', '-File', 'vc-start.ps1', '-VcBin', vcBin],
@@ -95,13 +94,12 @@ export async function run() {
         env: process.env
       }
     );
-    core.info(`end VirtualHere-Client`);
     if (p.error) {
       throw p.error;
     } else if (p.status != 0) {
-      throw new Error(`exitCode not zero ${p.status}`);
+      throw new Error(`exitCode not zero ${p.status} : ${p.output[2]}`);
     } else if (p.output[2] != '') {
-      throw new Error(`stderr : ${p.output[2]}`);
+      throw new Error(`err : ${p.output[2]}`);
     }
 
     const out = p.output[1] ?? '';
