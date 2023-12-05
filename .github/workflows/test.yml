@@ -19,9 +19,12 @@ jobs:
         with:
           vc-version: '>=5.5.6'
 
+      - name: Run Add Hub
+        run: VC-Device-Add -Server "${{ secrets.VIRTUALHERE_SERVER }}"
+
       - name: Run Find USB Token
         run: |
-          $success, $tokenAddress, $already = VC-Device-Add -Server "${{ secrets.VIRTUALHERE_SERVER }}" -DeviceName "${{ vars.VIRTUALHERE_DEVICE }}"
+          $success, $tokenAddress, $already = VC-Device-Add -DeviceName "${{ vars.VIRTUALHERE_DEVICE }}"
 
           if (!$success) {
             throw [System.Exception]::new("Device Not Added. ${{ vars.VIRTUALHERE_DEVICE }}")

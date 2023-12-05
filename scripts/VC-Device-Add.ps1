@@ -1,20 +1,9 @@
 [CmdletBinding()]
 param (
-  [Parameter()]
-  [string]
-  $Server,
-  [Parameter()]
+  [Parameter(mandatory=$True)]
   [string]
   $DeviceName
 )
-
-
-$ret = VC-Pipe "MANUAL HUB ADD,$Server"
-if ($ret -eq 'OK') {
-  Write-Host "Hub Added"
-}
-
-Start-Sleep -Seconds 1
 
 $already = "false"
 $tokeAddress = $null
@@ -75,7 +64,7 @@ do {
   try {
     $ret = VC-Pipe "USE,$tokeAddress"
     if ($ret -eq 'OK') {
-      Write-Host "Device Added: $DeviceName - $tokeAddress"
+      Write-Host "Device Added 1: $DeviceName - $tokeAddress"
       return @($True, $tokeAddress, $already)
     }
   }
@@ -83,11 +72,12 @@ do {
     # 실패했다고 했지만 List를 조회 해보면 이미 연결 처리가 됨
     $findRawTxt = VC-Pipe "LIST" | Select-String "\s+\-\-\>\s+" | findstr "$DeviceName"
     if ($null -ne $findRawTxt -Or $findRawTxt.IndexOf('(In-use by you)') -ne -1) {
-      Write-Host "Device Added: $DeviceName - $tokeAddress"
+      Write-Host "Device Added 2: $DeviceName - $tokeAddress"
       return @($True, $tokeAddress, $already)
     }
 
-    Write-Host "Error:"$_.Exception.Message
+    $ErrorActionPreference = $BakErrorActionPreference
+    throw
   }
   
   $i++
