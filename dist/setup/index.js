@@ -32234,7 +32234,7 @@ function run() {
             else {
                 core.setOutput('vc-already', 'false');
             }
-            core.info('Successfully Start up VirtualHere-Client');
+            core.info('Successfully Started VirtualHere-Client');
         }
     });
 }

@@ -38,7 +38,7 @@ export async function run() {
         throw new Error(`err : ${p.output[2]}`);
       }
 
-      core.info('Successfully stoped VirtualHere-Client');
+      core.info('Successfully Stoped VirtualHere-Client');
     }
   } catch (error) {
     let message = 'Unknown error!';

@@ -9,7 +9,7 @@ param (
 )
 
 
-$ret = .\scripts\virtualhere-pipe.ps1 "MANUAL HUB ADD,$Server"
+$ret = VC-Pipe "MANUAL HUB ADD,$Server"
 if ($ret -eq 'OK') {
   Write-Host "Hub Added"
 }
@@ -20,7 +20,7 @@ $already = "false"
 $tokeAddress = $null
 $start = (Get-Date)
 do {
-  $findRawTxt = .\scripts\virtualhere-pipe.ps1 "LIST" | Select-String "\s+\-\-\>\s+" | findstr "$DeviceName"
+  $findRawTxt = VC-Pipe "LIST" | Select-String "\s+\-\-\>\s+" | findstr "$DeviceName"
   if ($null -eq $findRawTxt) {
     throw [System.Exception]::new("Not Found $DeviceName")
   }
@@ -73,7 +73,7 @@ do {
   }
 
   try {
-    $ret = .\scripts\virtualhere-pipe.ps1 "USE,$tokeAddress"
+    $ret = VC-Pipe "USE,$tokeAddress"
     if ($ret -eq 'OK') {
       Write-Host "Device Added: $DeviceName - $tokeAddress"
       return @($True, $tokeAddress, $already)
@@ -81,7 +81,7 @@ do {
   }
   catch {
     # 실패했다고 했지만 List를 조회 해보면 이미 연결 처리가 됨
-    $findRawTxt = .\scripts\virtualhere-pipe.ps1 "LIST" | Select-String "\s+\-\-\>\s+" | findstr "$DeviceName"
+    $findRawTxt = VC-Pipe "LIST" | Select-String "\s+\-\-\>\s+" | findstr "$DeviceName"
     if ($null -ne $findRawTxt -Or $findRawTxt.IndexOf('(In-use by you)') -ne -1) {
       Write-Host "Device Added: $DeviceName - $tokeAddress"
       return @($True, $tokeAddress, $already)
