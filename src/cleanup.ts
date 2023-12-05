@@ -8,21 +8,13 @@ process.on('uncaughtException', e => {
   core.info(`[warning]${e.message}`);
 });
 
-const vsBin = core.getInput('vc-name');
-
-const stopCommand = `&{
-    $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
-    if ($virtualhere) {
-        $virtualhere.CloseMainWindow()
-        sleep 1
-        if (!$virtualhere.HasExited) {
-            $virtualhere | Stop-Process -Force
-        }
-    }
-}`;
-
 export async function run() {
   try {
+    const vcBin = core.getInput('vc-name');
+    if (!vcBin || vcBin.length <= 0) {
+      throw new Error('vc-name required');
+    }
+
     const shutdown = core.getBooleanInput('shutdown');
 
     if (!shutdown) {
@@ -30,10 +22,14 @@ export async function run() {
     }
 
     {
-      const p = spawnSync('pwsh', ['-NoProfile', '-Command', stopCommand], {
-        encoding: 'utf8',
-        env: process.env
-      });
+      const p = spawnSync(
+        'pwsh',
+        ['-NoProfile', '-File', 'vc-stop.ps1', '-VcBin', vcBin],
+        {
+          encoding: 'utf8',
+          env: process.env
+        }
+      );
       if (p.error) {
         throw p.error;
       } else if (p.status != 0) {

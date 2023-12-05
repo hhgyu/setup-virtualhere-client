@@ -7,20 +7,12 @@ import * as io from '@actions/io';
 import * as installer from './installer';
 import path from 'node:path';
 
-const vcBin = core.getInput('vc-name');
-
-const startCommand = `&{
-  $virtualhere = Get-Process ${vcBin} -ErrorAction SilentlyContinue
-  if (!$virtualhere) {
-    Write-Output 'vc-already=false'
-    ${vcBin} -e -g
-    sleep 1
-  } else {
-    Write-Output 'vc-already=true'
-  }
-}`;
-
 export async function run() {
+  const vcBin = core.getInput('vc-name');
+  if (!vcBin || vcBin.length <= 0) {
+    throw new Error('vc-namevcBin required');
+  }
+
   const version = core.getInput('vc-version');
 
   let arch = core.getInput('architecture');
@@ -63,7 +55,6 @@ export async function run() {
   }
 
   const vcPath = await io.which(vcBin);
-  core.info(`vcPath : ${vcPath} : ${os.platform()}`);
   if (os.platform() == 'win32') {
     const p = spawnSync(
       'pwsh',
@@ -74,7 +65,6 @@ export async function run() {
       ],
       {encoding: 'utf8', env: process.env}
     );
-    core.info(`pwsh runed`);
     if (p.error) {
       throw p.error;
     } else if (p.status != 0) {
@@ -84,12 +74,10 @@ export async function run() {
     }
 
     core.setOutput('vc-version', p.output[1]?.trim());
-    core.info(`vc-version : ${p.output[1]?.trim()}`);
   } else {
     const vcVersion = execSync(`${vcPath} -h`)?.toString() ?? '';
 
     core.setOutput('vc-version', parseVCVersion(vcVersion));
-    core.info(`vc-version : ${parseVCVersion(vcVersion)}`);
   }
 
   const scriptsPath = path.normalize(
@@ -98,10 +86,16 @@ export async function run() {
   core.addPath(scriptsPath);
 
   {
-    const p = spawnSync('pwsh', ['-NoProfile', '-Command', startCommand], {
-      encoding: 'utf8',
-      env: process.env
-    });
+    core.info(`start VirtualHere-Client`);
+    const p = spawnSync(
+      'pwsh',
+      ['-NoProfile', '-File', 'vc-start.ps1', '-VcBin', vcBin],
+      {
+        encoding: 'utf8',
+        env: process.env
+      }
+    );
+    core.info(`end VirtualHere-Client`);
     if (p.error) {
       throw p.error;
     } else if (p.status != 0) {
@@ -110,7 +104,6 @@ export async function run() {
       throw new Error(`stderr : ${p.output[2]}`);
     }
 
-    core.info(`start VirtualHere-Client`);
     const out = p.output[1] ?? '';
     if (out.includes('vc-already=true')) {
       core.setOutput('vc-already', 'true');

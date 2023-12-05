@@ -24750,26 +24750,19 @@ const node_child_process_1 = __nccwpck_require__(7718);
 process.on('uncaughtException', e => {
     core.info(`[warning]${e.message}`);
 });
-const vsBin = core.getInput('vc-name');
-const stopCommand = `&{
-    $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
-    if ($virtualhere) {
-        $virtualhere.CloseMainWindow()
-        sleep 1
-        if (!$virtualhere.HasExited) {
-            $virtualhere | Stop-Process -Force
-        }
-    }
-}`;
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            const vcBin = core.getInput('vc-name');
+            if (!vcBin || vcBin.length <= 0) {
+                throw new Error('vc-name required');
+            }
             const shutdown = core.getBooleanInput('shutdown');
             if (!shutdown) {
                 return;
             }
             {
-                const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', stopCommand], {
+                const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'vc-stop.ps1', '-VcBin', vcBin], {
                     encoding: 'utf8',
                     env: process.env
                 });

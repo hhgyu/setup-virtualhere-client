@@ -32159,20 +32159,13 @@ const core = __importStar(__nccwpck_require__(2186));
 const io = __importStar(__nccwpck_require__(7436));
 const installer = __importStar(__nccwpck_require__(2574));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
-const vcBin = core.getInput('vc-name');
-const startCommand = `&{
-  $virtualhere = Get-Process ${vcBin} -ErrorAction SilentlyContinue
-  if (!$virtualhere) {
-    Write-Output 'vc-already=false'
-    ${vcBin} -e -g
-    sleep 1
-  } else {
-    Write-Output 'vc-already=true'
-  }
-}`;
 function run() {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
+        const vcBin = core.getInput('vc-name');
+        if (!vcBin || vcBin.length <= 0) {
+            throw new Error('vc-namevcBin required');
+        }
         const version = core.getInput('vc-version');
         let arch = core.getInput('architecture');
         // if architecture supplied but node-version is not
@@ -32197,14 +32190,12 @@ function run() {
             core.info('[warning]vc-version input was not specified. The action will try to use pre-installed version.');
         }
         const vcPath = yield io.which(vcBin);
-        core.info(`vcPath : ${vcPath} : ${node_os_1.default.platform()}`);
         if (node_os_1.default.platform() == 'win32') {
             const p = (0, node_child_process_1.spawnSync)('pwsh', [
                 '-NoProfile',
                 '-Command',
                 `&{ Write-Output ([System.Diagnostics.FileVersionInfo]::GetVersionInfo("${vcPath}").FileVersion) }`
             ], { encoding: 'utf8', env: process.env });
-            core.info(`pwsh runed`);
             if (p.error) {
                 throw p.error;
             }
@@ -32215,20 +32206,20 @@ function run() {
                 throw new Error(`stderr : ${p.output[2]}`);
             }
             core.setOutput('vc-version', (_a = p.output[1]) === null || _a === void 0 ? void 0 : _a.trim());
-            core.info(`vc-version : ${(_b = p.output[1]) === null || _b === void 0 ? void 0 : _b.trim()}`);
         }
         else {
-            const vcVersion = (_d = (_c = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : '';
+            const vcVersion = (_c = (_b = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : '';
             core.setOutput('vc-version', parseVCVersion(vcVersion));
-            core.info(`vc-version : ${parseVCVersion(vcVersion)}`);
         }
         const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts'));
         core.addPath(scriptsPath);
         {
-            const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', startCommand], {
+            core.info(`start VirtualHere-Client`);
+            const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-File', 'vc-start.ps1', '-VcBin', vcBin], {
                 encoding: 'utf8',
                 env: process.env
             });
+            core.info(`end VirtualHere-Client`);
             if (p.error) {
                 throw p.error;
             }
@@ -32238,8 +32229,7 @@ function run() {
             else if (p.output[2] != '') {
                 throw new Error(`stderr : ${p.output[2]}`);
             }
-            core.info(`start VirtualHere-Client`);
-            const out = (_e = p.output[1]) !== null && _e !== void 0 ? _e : '';
+            const out = (_d = p.output[1]) !== null && _d !== void 0 ? _d : '';
             if (out.includes('vc-already=true')) {
                 core.setOutput('vc-already', 'true');
             }
