@@ -63,7 +63,7 @@ export async function run() {
   }
 
   const vcPath = await io.which(vcBin);
-
+  core.info(`vcPath : ${vcPath} : ${os.platform()}`);
   if (os.platform() == 'win32') {
     const p = spawnSync(
       'pwsh',
@@ -74,6 +74,7 @@ export async function run() {
       ],
       {encoding: 'utf8', env: process.env}
     );
+    core.info(`pwsh runed`);
     if (p.error) {
       throw p.error;
     } else if (p.status != 0) {
@@ -83,10 +84,12 @@ export async function run() {
     }
 
     core.setOutput('vc-version', p.output[1]?.trim());
+    core.info(`vc-version : ${p.output[1]?.trim()}`);
   } else {
     const vcVersion = execSync(`${vcPath} -h`)?.toString() ?? '';
 
     core.setOutput('vc-version', parseVCVersion(vcVersion));
+    core.info(`vc-version : ${parseVCVersion(vcVersion)}`);
   }
 
   const scriptsPath = path.normalize(
@@ -107,6 +110,7 @@ export async function run() {
       throw new Error(`stderr : ${p.output[2]}`);
     }
 
+    core.info(`start VirtualHere-Client`);
     const out = p.output[1] ?? '';
     if (out.includes('vc-already=true')) {
       core.setOutput('vc-already', 'true');

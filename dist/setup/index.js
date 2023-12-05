@@ -32171,7 +32171,7 @@ const startCommand = `&{
   }
 }`;
 function run() {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function* () {
         const version = core.getInput('vc-version');
         let arch = core.getInput('architecture');
@@ -32197,12 +32197,14 @@ function run() {
             core.info('[warning]vc-version input was not specified. The action will try to use pre-installed version.');
         }
         const vcPath = yield io.which(vcBin);
+        core.info(`vcPath : ${vcPath} : ${node_os_1.default.platform()}`);
         if (node_os_1.default.platform() == 'win32') {
             const p = (0, node_child_process_1.spawnSync)('pwsh', [
                 '-NoProfile',
                 '-Command',
                 `&{ Write-Output ([System.Diagnostics.FileVersionInfo]::GetVersionInfo("${vcPath}").FileVersion) }`
             ], { encoding: 'utf8', env: process.env });
+            core.info(`pwsh runed`);
             if (p.error) {
                 throw p.error;
             }
@@ -32213,10 +32215,12 @@ function run() {
                 throw new Error(`stderr : ${p.output[2]}`);
             }
             core.setOutput('vc-version', (_a = p.output[1]) === null || _a === void 0 ? void 0 : _a.trim());
+            core.info(`vc-version : ${(_b = p.output[1]) === null || _b === void 0 ? void 0 : _b.trim()}`);
         }
         else {
-            const vcVersion = (_c = (_b = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : '';
+            const vcVersion = (_d = (_c = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : '';
             core.setOutput('vc-version', parseVCVersion(vcVersion));
+            core.info(`vc-version : ${parseVCVersion(vcVersion)}`);
         }
         const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(__dirname, '..', '..', 'scripts'));
         core.addPath(scriptsPath);
@@ -32234,7 +32238,8 @@ function run() {
             else if (p.output[2] != '') {
                 throw new Error(`stderr : ${p.output[2]}`);
             }
-            const out = (_d = p.output[1]) !== null && _d !== void 0 ? _d : '';
+            core.info(`start VirtualHere-Client`);
+            const out = (_e = p.output[1]) !== null && _e !== void 0 ? _e : '';
             if (out.includes('vc-already=true')) {
                 core.setOutput('vc-already', 'true');
             }
