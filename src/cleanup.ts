@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 import {spawnSync} from 'node:child_process';
-import {platform} from 'node:os';
 
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
@@ -9,7 +8,7 @@ process.on('uncaughtException', e => {
   core.info(`[warning]${e.message}`);
 });
 
-const vsBin = `virtualhere-client${platform() == 'win32' ? '.exe' : ''}`;
+const vsBin = 'virtualhere-client';
 
 const stopCommand = `&{
     $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
@@ -31,11 +30,10 @@ export async function run() {
     }
 
     {
-      const p = spawnSync(
-        `pwsh${platform() == 'win32' ? '.exe' : ''}`,
-        ['-NoProfile', '-Command', stopCommand],
-        {encoding: 'utf8', env: process.env}
-      );
+      const p = spawnSync('pwsh', ['-NoProfile', '-Command', stopCommand], {
+        encoding: 'utf8',
+        env: process.env
+      });
       if (p.error) {
         throw p.error;
       } else if (p.status != 0) {

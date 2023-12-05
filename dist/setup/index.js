@@ -32159,7 +32159,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const io = __importStar(__nccwpck_require__(7436));
 const installer = __importStar(__nccwpck_require__(2574));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
-const vsBin = `virtualhere-client${node_os_1.default.platform() == 'win32' ? '.exe' : ''}`;
+const vsBin = 'virtualhere-client';
 const startCommand = `&{
   $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
   if (!$virtualhere) {
@@ -32200,7 +32200,7 @@ function run() {
         core.debug(`add bin ${added}`);
         const vcPath = yield io.which('virtualhere-client');
         if (node_os_1.default.platform() == 'win32') {
-            const p = (0, node_child_process_1.spawnSync)('pwsh.exe', [
+            const p = (0, node_child_process_1.spawnSync)('pwsh', [
                 '-NoProfile',
                 '-Command',
                 `&{ Write-Output ([System.Diagnostics.FileVersionInfo]::GetVersionInfo("${vcPath}").FileVersion) }`
@@ -32224,7 +32224,10 @@ function run() {
         process.env['PATH'] = `${scriptsPath}:${process.env['PATH']}`;
         core.addPath(scriptsPath);
         {
-            const p = (0, node_child_process_1.spawnSync)(`pwsh${node_os_1.default.platform() == 'win32' ? '.exe' : ''}`, ['-NoProfile', '-Command', startCommand], { encoding: 'utf8', env: process.env });
+            const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', startCommand], {
+                encoding: 'utf8',
+                env: process.env
+            });
             if (p.error) {
                 throw p.error;
             }

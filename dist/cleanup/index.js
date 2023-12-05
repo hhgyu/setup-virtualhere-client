@@ -24744,14 +24744,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const node_child_process_1 = __nccwpck_require__(7718);
-const node_os_1 = __nccwpck_require__(612);
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
 // throw an uncaught exception.  Instead of failing this action, just warn.
 process.on('uncaughtException', e => {
     core.info(`[warning]${e.message}`);
 });
-const vsBin = `virtualhere-client${(0, node_os_1.platform)() == 'win32' ? '.exe' : ''}`;
+const vsBin = 'virtualhere-client';
 const stopCommand = `&{
     $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
     if ($virtualhere) {
@@ -24770,7 +24769,10 @@ function run() {
                 return;
             }
             {
-                const p = (0, node_child_process_1.spawnSync)(`pwsh${(0, node_os_1.platform)() == 'win32' ? '.exe' : ''}`, ['-NoProfile', '-Command', stopCommand], { encoding: 'utf8', env: process.env });
+                const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', stopCommand], {
+                    encoding: 'utf8',
+                    env: process.env
+                });
                 if (p.error) {
                     throw p.error;
                 }
@@ -24918,14 +24920,6 @@ module.exports = require("node:child_process");
 
 "use strict";
 module.exports = require("node:events");
-
-/***/ }),
-
-/***/ 612:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("node:os");
 
 /***/ }),
 

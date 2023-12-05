@@ -7,7 +7,7 @@ import * as io from '@actions/io';
 import * as installer from './installer';
 import path from 'node:path';
 
-const vsBin = `virtualhere-client${os.platform() == 'win32' ? '.exe' : ''}`;
+const vsBin = 'virtualhere-client';
 
 const startCommand = `&{
   $virtualhere = Get-Process ${vsBin} -ErrorAction SilentlyContinue
@@ -69,7 +69,7 @@ export async function run() {
 
   if (os.platform() == 'win32') {
     const p = spawnSync(
-      'pwsh.exe',
+      'pwsh',
       [
         '-NoProfile',
         '-Command',
@@ -99,11 +99,10 @@ export async function run() {
   core.addPath(scriptsPath);
 
   {
-    const p = spawnSync(
-      `pwsh${os.platform() == 'win32' ? '.exe' : ''}`,
-      ['-NoProfile', '-Command', startCommand],
-      {encoding: 'utf8', env: process.env}
-    );
+    const p = spawnSync('pwsh', ['-NoProfile', '-Command', startCommand], {
+      encoding: 'utf8',
+      env: process.env
+    });
     if (p.error) {
       throw p.error;
     } else if (p.status != 0) {
