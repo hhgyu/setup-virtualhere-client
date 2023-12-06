@@ -82,7 +82,7 @@ export async function run() {
     core.setOutput('vc-version', parseVCVersion(vcVersion));
   }
 
-  const scriptsPath = normalize(join(process.cwd(), 'scripts'));
+  const scriptsPath = normalize(join(__dirname, 'vc-scripts'));
   core.addPath(scriptsPath);
   core.setOutput('vc-scripts-path', scriptsPath);
   core.info(`Added VirtualHere-Client scripts to the path: ${scriptsPath}`);

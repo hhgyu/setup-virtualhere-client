@@ -8,10 +8,11 @@
     "url": "git+https://github.com/hhgyu/setup-virtualhere.git"
   },
   "scripts": {
-    "build:scripts": "cpy node_modules/@actions/tool-cache/scripts/**/* dist/scripts/",
+    "build:scripts": "cpy node_modules/@actions/tool-cache/scripts/**/* dist/scripts",
+    "build:vc-scripts": "cpy vc-scripts/* dist/vc-scripts",
     "build:setup": "ncc build -s -o dist/setup src/setup-vc.ts",
     "build:cleanup": "ncc build -s -o dist/cleanup src/cleanup.ts ",
-    "build": "concurrently 'tsc' 'npm:build:setup' 'npm:build:cleanup' 'npm:build:scripts'",
+    "build": "concurrently 'tsc' 'npm:build:setup' 'npm:build:cleanup' 'npm:build:scripts' 'npm:build:vc-scripts'",
     "format": "prettier --no-error-on-unmatched-pattern --config ./.prettierrc.js --write \"**/*.{ts,yml,yaml}\"",
     "format-check": "prettier --no-error-on-unmatched-pattern --config ./.prettierrc.js --check \"**/*.{ts,yml,yaml}\"",
     "lint": "eslint --config ./.eslintrc.js \"**/*.ts\"",

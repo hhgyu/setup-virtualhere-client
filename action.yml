@@ -1,6 +1,6 @@
 name: 'Setup VirtualHere Client environment'
 description: 'Setup a VirtualHere Client environment by adding problem matchers and optionally downloading and adding it to the PATH.'
-author: 'GitHub'
+author: 'hhgyu15@gmail.com'
 inputs:
   vc-version:
     description: 'Version Spec of the version to use. Examples: 5.5.6, 10.15.1, >=10.15.0.'
