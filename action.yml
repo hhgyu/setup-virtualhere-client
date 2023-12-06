@@ -21,6 +21,12 @@ inputs:
 outputs:
   vc-version:
     description: 'The installed VirtualHere Client version.'
+  vc-already:
+    description: 'VirtualHere Client already runned'
+  vc-path:
+    description: 'The installed VirtualHere Client Path.'
+  vc-script-path:
+    description: 'The installed VirtualHere Client Scripts Path.'
 runs:
   using: 'node20'
   main: 'dist/setup/index.js'
