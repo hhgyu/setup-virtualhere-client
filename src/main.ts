@@ -45,6 +45,7 @@ export async function run() {
     );
 
     core.addPath(installDir);
+    core.setOutput('vc-path', installDir);
     core.info(`Added VirtualHere-Client to the path: ${installDir}`);
 
     core.info(`Successfully set up VirtualHere-Client version ${version}`);
@@ -82,6 +83,7 @@ export async function run() {
 
   const scriptsPath = path.normalize(path.join(process.cwd(), 'scripts'));
   core.addPath(scriptsPath);
+  core.setOutput('vc-scripts-path', scriptsPath);
   core.info(`Added VirtualHere-Client scripts to the path: ${scriptsPath}`);
 
   {

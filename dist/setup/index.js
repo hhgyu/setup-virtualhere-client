@@ -32183,6 +32183,7 @@ function run() {
             const checkLatest = (core.getInput('check-latest') || 'false').toUpperCase() === 'TRUE';
             const installDir = yield installer.getVC(version, stable, checkLatest, auth, arch);
             core.addPath(installDir);
+            core.setOutput('vc-path', installDir);
             core.info(`Added VirtualHere-Client to the path: ${installDir}`);
             core.info(`Successfully set up VirtualHere-Client version ${version}`);
         }
@@ -32213,6 +32214,7 @@ function run() {
         }
         const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(process.cwd(), 'scripts'));
         core.addPath(scriptsPath);
+        core.setOutput('vc-scripts-path', scriptsPath);
         core.info(`Added VirtualHere-Client scripts to the path: ${scriptsPath}`);
         {
             const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', `VC-Start -VcBin ${vcBin}`], {
