@@ -32217,13 +32217,10 @@ function run() {
         core.setOutput('vc-scripts-path', scriptsPath);
         core.info(`Added VirtualHere-Client scripts to the path: ${scriptsPath}`);
         {
-            const p = (0, node_child_process_1.spawnSync)('pwsh', [
-                '-NoProfile',
-                '-Command',
-                `${scriptsPath}${node_path_1.default.delimiter}VC-Start.ps1 -VcBin ${vcBin}`
-            ], {
+            const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', `VC-Start.ps1 -VcBin ${vcBin}`], {
                 encoding: 'utf8',
-                env: Object.assign({}, process.env)
+                env: Object.assign({}, process.env),
+                cwd: scriptsPath
             });
             if (p.error) {
                 throw p.error;
