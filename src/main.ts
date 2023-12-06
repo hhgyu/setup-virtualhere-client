@@ -1,7 +1,6 @@
 import os from 'node:os';
 import {execSync, spawnSync} from 'node:child_process';
 import {join, normalize} from 'node:path';
-import {readdirSync} from 'node:fs';
 
 import * as core from '@actions/core';
 import * as io from '@actions/io';
@@ -86,11 +85,6 @@ export async function run() {
   core.addPath(scriptsPath);
   core.setOutput('vc-scripts-path', scriptsPath);
   core.info(`Added VirtualHere-Client scripts to the path: ${scriptsPath}`);
-
-  core.info(`listing : ${scriptsPath}`);
-  readdirSync(scriptsPath).forEach(file => {
-    core.info(`file : ${file}`);
-  });
 
   {
     const p = spawnSync(
