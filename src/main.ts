@@ -1,11 +1,12 @@
 import os from 'node:os';
 import {execSync, spawnSync} from 'node:child_process';
+import {join, normalize} from 'node:path';
+import {readdirSync} from 'node:fs';
 
 import * as core from '@actions/core';
 import * as io from '@actions/io';
 
 import * as installer from './installer';
-import path from 'node:path';
 
 export async function run() {
   const vcBin = core.getInput('vc-name');
@@ -81,21 +82,20 @@ export async function run() {
     core.setOutput('vc-version', parseVCVersion(vcVersion));
   }
 
-  const scriptsPath = path.normalize(path.join(process.cwd(), 'scripts'));
+  const scriptsPath = normalize(join(process.cwd(), 'scripts'));
   core.addPath(scriptsPath);
   core.setOutput('vc-scripts-path', scriptsPath);
   core.info(`Added VirtualHere-Client scripts to the path: ${scriptsPath}`);
 
+  core.info(`listing : ${scriptsPath}`);
+  readdirSync(scriptsPath).forEach(file => {
+    core.info(`file : ${file}`);
+  });
+
   {
     const p = spawnSync(
       'pwsh',
-      [
-        '-NoProfile',
-        '-Command',
-        `VC-Start.ps1 -VcBin ${vcBin}`,
-        '-WorkingDirectroy',
-        scriptsPath
-      ],
+      ['-NoProfile', '-Command', `VC-Start.ps1 -VcBin ${vcBin}`],
       {
         encoding: 'utf8',
         env: {...process.env}

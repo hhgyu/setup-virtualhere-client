@@ -32155,10 +32155,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseVCVersion = exports.run = void 0;
 const node_os_1 = __importDefault(__nccwpck_require__(612));
 const node_child_process_1 = __nccwpck_require__(7718);
+const node_path_1 = __nccwpck_require__(9411);
+const node_fs_1 = __nccwpck_require__(7561);
 const core = __importStar(__nccwpck_require__(2186));
 const io = __importStar(__nccwpck_require__(7436));
 const installer = __importStar(__nccwpck_require__(2574));
-const node_path_1 = __importDefault(__nccwpck_require__(9411));
 function run() {
     var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
@@ -32212,18 +32213,16 @@ function run() {
             const vcVersion = (_c = (_b = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : '';
             core.setOutput('vc-version', parseVCVersion(vcVersion));
         }
-        const scriptsPath = node_path_1.default.normalize(node_path_1.default.join(process.cwd(), 'scripts'));
+        const scriptsPath = (0, node_path_1.normalize)((0, node_path_1.join)(process.cwd(), 'scripts'));
         core.addPath(scriptsPath);
         core.setOutput('vc-scripts-path', scriptsPath);
         core.info(`Added VirtualHere-Client scripts to the path: ${scriptsPath}`);
+        core.info(`listing : ${scriptsPath}`);
+        (0, node_fs_1.readdirSync)(scriptsPath).forEach(file => {
+            core.info(`file : ${file}`);
+        });
         {
-            const p = (0, node_child_process_1.spawnSync)('pwsh', [
-                '-NoProfile',
-                '-Command',
-                `VC-Start.ps1 -VcBin ${vcBin}`,
-                '-WorkingDirectroy',
-                scriptsPath
-            ], {
+            const p = (0, node_child_process_1.spawnSync)('pwsh', ['-NoProfile', '-Command', `VC-Start.ps1 -VcBin ${vcBin}`], {
                 encoding: 'utf8',
                 env: Object.assign({}, process.env)
             });
