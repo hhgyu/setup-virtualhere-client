@@ -89,11 +89,16 @@ export async function run() {
   {
     const p = spawnSync(
       'pwsh',
-      ['-NoProfile', '-Command', `VC-Start.ps1 -VcBin ${vcBin}`],
+      [
+        '-NoProfile',
+        '-Command',
+        `VC-Start.ps1 -VcBin ${vcBin}`,
+        '-WorkingDirectroy',
+        scriptsPath
+      ],
       {
         encoding: 'utf8',
-        env: {...process.env},
-        cwd: scriptsPath
+        env: {...process.env}
       }
     );
     if (p.error) {
