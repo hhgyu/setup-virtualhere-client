@@ -32213,7 +32213,7 @@ function run() {
             const vcVersion = (_c = (_b = (0, node_child_process_1.execSync)(`${vcPath} -h`)) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : '';
             core.setOutput('vc-version', parseVCVersion(vcVersion));
         }
-        const scriptsPath = (0, node_path_1.normalize)((0, node_path_1.join)(__dirname, 'vc-scripts'));
+        const scriptsPath = (0, node_path_1.normalize)((0, node_path_1.join)(__dirname, 'scripts'));
         core.addPath(scriptsPath);
         core.setOutput('vc-scripts-path', scriptsPath);
         core.info(`Added VirtualHere-Client scripts to the path: ${scriptsPath}`);
