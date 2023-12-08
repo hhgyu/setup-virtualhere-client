@@ -32062,6 +32062,8 @@ function cacheWindowsDir(extPath, tool, version, arch) {
         const actualToolCacheRoot = defaultToolCacheRoot
             .replace('C:', 'D:')
             .replace('c:', 'd:');
+        if (defaultToolCacheRoot === actualToolCacheRoot)
+            return false;
         // make toolcache root to be on drive d:
         process.env['RUNNER_TOOL_CACHE'] = actualToolCacheRoot;
         const actualToolCacheDir = yield (0, tool_cache_1.cacheDir)(extPath, tool, version, arch);
