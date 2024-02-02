@@ -1,3 +1,19 @@
+function Await-Task {
+  param (
+      [Parameter(ValueFromPipeline=$true, Mandatory=$true)]
+      $task
+  )
+
+  process {
+      $start = (Get-Date)
+      while (-not $task.AsyncWaitHandle.WaitOne(200)) {
+        if ((Get-Date).Subtract($start).TotalMilliseconds -gt 5000) {
+          throw [System.TimeoutException]::new("Read Timeout")
+        }
+      }
+      $task.GetAwaiter().GetResult()
+  }
+}
 $client = [System.IO.Pipes.NamedPipeClientStream]::new(".", "vhclient", [System.IO.Pipes.PipeDirection]::InOut)
 try {
   $client.Connect(5000)
@@ -7,15 +23,20 @@ try {
     $writer.AutoFlush = $True
     $writer.Write($Args[0].ToCharArray())
     Start-Sleep -Milliseconds 200
+    
+    $reader = [System.IO.StreamReader]::new($client, [System.Text.Encoding]::UTF8)
+    
     $chars = [System.Collections.Generic.List[char]]::new()
-    $reader = [System.IO.StreamReader]::new($client)
-    $start = (Get-Date)
-    while ($reader.Peek() -ne -1) {
-      if ((Get-Date).Subtract($start).TotalMilliseconds -gt 5000) {
-        throw [System.TimeoutException]::new("Read Timeout")
+
+    $temp = [char[]]::new(512000)
+    $task = $reader.ReadAsync($temp, 0, 512000)
+    
+    $ret = $task | Await-Task
+    $task.Dispose()
+    if($ret -ne 0) {
+      foreach($i in 0..$task.Result){
+        $chars.Add($temp[$i])
       }
-      
-      $chars.Add($reader.Read())
     }
     
     $ret = [System.Text.Encoding]::UTF8.GetString($chars)
