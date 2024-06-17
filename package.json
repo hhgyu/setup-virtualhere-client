@@ -37,7 +37,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-node": "^11.1.0",
     "husky": "^9.0.11",
-    "prettier": "^3.3.0",
+    "prettier": "^3.3.2",
     "semver": "^7.6.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
