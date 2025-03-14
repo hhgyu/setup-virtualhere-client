@@ -1,11 +1,11 @@
 {
-  "name": "setup-virtualhere",
+  "name": "setup-virtualhere-client",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hhgyu/setup-virtualhere.git"
+    "url": "git+https://github.com/hhgyu/setup-virtualhere-client.git"
   },
   "scripts": {
     "build:scripts": "cpy node_modules/@actions/tool-cache/scripts/**/* dist/scripts",
