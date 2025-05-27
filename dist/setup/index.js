@@ -1,5 +1,4 @@
-require('./sourcemap-register.js');import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
-/******/ (() => { // webpackBootstrap
+require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 4914:
@@ -31282,7 +31281,7 @@ module.exports = require("node:child_process");
 /***/ ((module) => {
 
 "use strict";
-module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:crypto");
+module.exports = require("node:crypto");
 
 /***/ }),
 
