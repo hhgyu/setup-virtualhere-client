@@ -3,7 +3,6 @@
   "version": "1.0.6",
   "description": "",
   "main": "lib/index.js",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hhgyu/setup-virtualhere-client.git"

@@ -1,24 +1,21 @@
-import eslint from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsparser from '@typescript-eslint/parser';
-import eslintPluginNode from 'eslint-plugin-node';
+// @ts-check
+const eslint = require('@eslint/js');
+const tseslint = require('@typescript-eslint/eslint-plugin');
+const tsParser = require('@typescript-eslint/parser');
+const nodePlugin = require('eslint-plugin-node');
 
-export default [
+module.exports = [
+  // 전역 설정
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'lib/**',
-      '.git/**',
-      '!src/**',
-      '!__tests__/**'
-    ],
+    ignores: ['node_modules/**', 'dist/**', 'lib/**', '.git/**']
   },
+  // js 권장 설정
   eslint.configs.recommended,
+  // TypeScript 파일 설정
   {
     files: ['**/*.ts'],
     languageOptions: {
-      parser: tsparser,
+      parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
@@ -34,9 +31,10 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tseslint,
-      'node': eslintPluginNode,
+      'node': nodePlugin,
     },
     rules: {
+      ...tseslint.configs.recommended.rules,
       '@typescript-eslint/no-require-imports': 'error',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -60,6 +58,7 @@ export default [
       'node/no-extraneous-import': 'error'
     },
   },
+  // 테스트 파일 설정
   {
     files: ['**/*{test,spec}.ts'],
     rules: {
@@ -67,6 +66,7 @@ export default [
       'no-console': 'off'
     }
   },
+  // 기타 Node.js 설정
   {
     languageOptions: {
       ecmaVersion: 'latest',
@@ -76,4 +76,5 @@ export default [
       },
     },
   },
-]; 
+];
+
